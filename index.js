@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
 const dns = require('dns');
+const { isURL } = require('validator');
 
 // Basic Configuration
 const port = process.env.PORT || 3000;
@@ -114,7 +115,11 @@ app.route("/api/shorturl/:url_id?")
   })
    .post((req, res) => {
     const inputURL = req.body.url;
-    const hostname = new URL(inputURL).hostname;
+    if (!isURL(inputURL)) {
+      return res.status(400).json({ "error": "Invalid URL" });
+    } else {
+      const hostname = new URL(inputURL).hostname;
+    }
     dns.lookup(hostname, err => {
       if (err)  {
         res.json({"error":"Invalid Hostname"})
