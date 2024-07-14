@@ -117,9 +117,8 @@ app.route("/api/shorturl/:url_id?")
     const inputURL = req.body.url;
     if (!isURL(inputURL)) {
       return res.status(400).json({ "error": "Invalid URL" });
-    } else {
-      const hostname = new URL(inputURL).hostname;
-    }
+    } 
+    const hostname = new URL(inputURL).hostname;
     dns.lookup(hostname, err => {
       if (err)  {
         res.json({"error":"Invalid Hostname"})
